@@ -34,6 +34,19 @@ ghostImg.src = 'assets/ghosty.png';
 const jumpSound = new Audio('assets/jump.wav');
 const gameOverSound = new Audio('assets/game_over.wav');
 
+// Addons (acessórios em volta do ghost)
+const addons = [
+    { id: 'none', name: 'Nenhum', img: null },
+    { id: 'addon1', name: 'Addon 1', img: new Image() },
+    { id: 'addon2', name: 'Addon 2', img: new Image() },
+    { id: 'addon3', name: 'Addon 3', img: new Image() }
+];
+addons[1].img.src = 'assets/avatar/1.png';
+addons[2].img.src = 'assets/avatar/2.png';
+addons[3].img.src = 'assets/avatar/3.png';
+let selectedAddon = 'none';
+const addonsContainer = document.getElementById('addons');
+
 // Skins - default usa a imagem ghosty.png
 const skins = [
     { id: 'default', emoji: '👻', unlocked: true, requirement: null, useImage: true },
@@ -128,6 +141,7 @@ function loadData() {
     
     totalPowerUpsCollected = parseInt(localStorage.getItem('flappyKiroPowerUps')) || 0;
     selectedSkin = localStorage.getItem('flappyKiroSelectedSkin') || 'default';
+    selectedAddon = localStorage.getItem('flappyKiroSelectedAddon') || 'none';
 }
 
 function saveData() {
@@ -136,6 +150,7 @@ function saveData() {
     localStorage.setItem('flappyKiroAchievements', JSON.stringify(Object.values(achievements).filter(a => a.unlocked).map(a => a.id)));
     localStorage.setItem('flappyKiroPowerUps', totalPowerUpsCollected);
     localStorage.setItem('flappyKiroSelectedSkin', selectedSkin);
+    localStorage.setItem('flappyKiroSelectedAddon', selectedAddon);
 }
 
 function getLeaderboard() {
@@ -207,6 +222,33 @@ function renderSkins() {
             };
         }
         skinsContainer.appendChild(div);
+    });
+}
+
+// Addon selector
+function renderAddons() {
+    if (!addonsContainer) return;
+    addonsContainer.innerHTML = '';
+    addons.forEach(addon => {
+        const div = document.createElement('div');
+        div.className = `addon-option ${addon.id === selectedAddon ? 'selected' : ''}`;
+        div.title = addon.name;
+        
+        if (addon.img) {
+            const img = document.createElement('img');
+            img.src = addon.img.src;
+            img.alt = addon.name;
+            div.appendChild(img);
+        } else {
+            div.textContent = '❌';
+        }
+        
+        div.onclick = () => {
+            selectedAddon = addon.id;
+            saveData();
+            renderAddons();
+        };
+        addonsContainer.appendChild(div);
     });
 }
 
@@ -521,15 +563,24 @@ function drawGhost() {
         ctx.shadowBlur = 20;
     }
     
-    // Draw skin
+    // Draw skin first (ghost in the center, offset down-left)
+    const ghostOffsetX = 2;
+    const ghostOffsetY = 5;
     const currentSkin = skins.find(s => s.id === selectedSkin);
     if (currentSkin && currentSkin.useImage) {
-        ctx.drawImage(ghostImg, -ghost.width / 2, -ghost.height / 2, ghost.width, ghost.height);
+        ctx.drawImage(ghostImg, -ghost.width / 2 + ghostOffsetX, -ghost.height / 2 + ghostOffsetY, ghost.width, ghost.height);
     } else if (currentSkin) {
         ctx.font = '40px Arial';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(currentSkin.emoji, 0, 0);
+        ctx.fillText(currentSkin.emoji, ghostOffsetX, ghostOffsetY);
+    }
+    
+    // Draw addon (on top of ghost, as a frame/overlay)
+    const currentAddon = addons.find(a => a.id === selectedAddon);
+    if (currentAddon && currentAddon.img) {
+        const addonSize = ghost.width + 70;
+        ctx.drawImage(currentAddon.img, -addonSize / 2, -addonSize / 2, addonSize, addonSize);
     }
     
     ctx.restore();
@@ -678,6 +729,7 @@ shareBtn.addEventListener('click', shareScore);
 // Initialize
 loadData();
 renderSkins();
+renderAddons();
 displayLeaderboard(startLeaderboard);
 showTutorial();
 

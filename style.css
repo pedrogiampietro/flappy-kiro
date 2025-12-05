@@ -398,3 +398,47 @@ button:hover {
     0%, 100% { text-shadow: 0 0 10px rgba(255, 68, 68, 0.5); }
     50% { text-shadow: 0 0 30px rgba(255, 68, 68, 0.8), 0 0 60px rgba(255, 68, 68, 0.4); }
 }
+
+/* Addon Selector */
+#addon-selector {
+    margin: 15px 0;
+    text-align: center;
+}
+
+#addons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.addon-option {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    cursor: pointer;
+    border: 3px solid transparent;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    background: rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+}
+
+.addon-option img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.addon-option:hover {
+    transform: scale(1.1);
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.addon-option.selected {
+    border-color: #9b59b6;
+    box-shadow: 0 0 15px rgba(155, 89, 182, 0.6);
+}
