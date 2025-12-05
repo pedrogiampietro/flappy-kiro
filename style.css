@@ -1,0 +1,400 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#game-container {
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+}
+
+#game-container.shake {
+    animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translate(0, 0) rotate(0); }
+    10% { transform: translate(-15px, -5px) rotate(-2deg); }
+    20% { transform: translate(15px, 5px) rotate(2deg); }
+    30% { transform: translate(-12px, -3px) rotate(-1.5deg); }
+    40% { transform: translate(12px, 3px) rotate(1.5deg); }
+    50% { transform: translate(-8px, -2px) rotate(-1deg); }
+    60% { transform: translate(8px, 2px) rotate(1deg); }
+    70% { transform: translate(-5px, -1px) rotate(-0.5deg); }
+    80% { transform: translate(5px, 1px) rotate(0.5deg); }
+    90% { transform: translate(-2px, 0) rotate(0); }
+}
+
+#gameCanvas {
+    display: block;
+}
+
+#ui-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    pointer-events: none;
+    z-index: 10;
+}
+
+#score {
+    font-size: 48px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+#combo {
+    font-size: 24px;
+    color: #ff6b35;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    animation: pulse 0.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+}
+
+#high-score {
+    font-size: 18px;
+    color: #ffd700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+#start-screen, #game-over-screen, #pause-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    z-index: 20;
+}
+
+#start-screen h1, #game-over-screen h1, #pause-screen h1 {
+    font-size: 42px;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+#start-screen p, #game-over-screen p, #pause-screen p {
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+#skin-selector {
+    margin: 15px 0;
+    text-align: center;
+}
+
+#skins {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.skin-option {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    cursor: pointer;
+    border: 3px solid transparent;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    background: rgba(255,255,255,0.1);
+}
+
+.skin-option:hover { transform: scale(1.1); }
+.skin-option.selected { border-color: #4CAF50; box-shadow: 0 0 10px #4CAF50; }
+.skin-option.locked { opacity: 0.5; position: relative; }
+.skin-option.locked::after { content: '🔒'; position: absolute; font-size: 16px; }
+
+
+button {
+    margin-top: 15px;
+    padding: 12px 25px;
+    font-size: 18px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.2s;
+}
+
+button:hover {
+    background: #45a049;
+    transform: scale(1.05);
+}
+
+#share-btn {
+    background: #3498db;
+}
+
+#share-btn:hover {
+    background: #2980b9;
+}
+
+#player-name {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+    margin-top: 10px;
+    text-align: center;
+}
+
+#leaderboard, #start-highscores {
+    margin-top: 15px;
+    text-align: center;
+}
+
+#leaderboard h3, #start-highscores h3 {
+    margin-bottom: 10px;
+    color: #ffd700;
+}
+
+#leaderboard-list, #start-leaderboard {
+    list-style: none;
+    padding: 0;
+}
+
+#leaderboard-list li, #start-leaderboard li {
+    padding: 5px 0;
+    font-size: 14px;
+}
+
+#medal-container {
+    font-size: 60px;
+    margin: 10px 0;
+}
+
+#tutorial {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 30;
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+#tutorial-content {
+    text-align: center;
+    color: white;
+    background: linear-gradient(145deg, rgba(40, 40, 60, 0.9), rgba(20, 20, 40, 0.95));
+    padding: 40px 50px;
+    border-radius: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    max-width: 350px;
+    animation: modalSlideIn 0.4s ease-out;
+}
+
+@keyframes modalSlideIn {
+    from { 
+        opacity: 0;
+        transform: scale(0.8) translateY(-30px);
+    }
+    to { 
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+#tutorial-content h2 {
+    font-size: 36px;
+    margin-bottom: 25px;
+    background: linear-gradient(135deg, #fff, #a0a0ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.tutorial-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px 20px;
+    margin: 10px 0;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    transition: all 0.2s;
+}
+
+.tutorial-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateX(5px);
+}
+
+.tutorial-icon {
+    font-size: 28px;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+.tutorial-text {
+    text-align: left;
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.tutorial-text strong {
+    color: #ffd700;
+}
+
+#tutorial-close {
+    margin-top: 25px;
+    padding: 15px 40px;
+    font-size: 18px;
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    border: none;
+    border-radius: 25px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 5px 20px rgba(76, 175, 80, 0.4);
+}
+
+#tutorial-close:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(76, 175, 80, 0.6);
+}
+
+#achievement-popup {
+    position: absolute;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #ffd700, #ff8c00);
+    color: #333;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: bold;
+    z-index: 25;
+    animation: slideDown 0.5s ease-out, fadeOut 0.5s ease-in 2.5s forwards;
+}
+
+@keyframes slideDown {
+    from { top: -50px; opacity: 0; }
+    to { top: 80px; opacity: 1; }
+}
+
+@keyframes fadeOut {
+    to { opacity: 0; }
+}
+
+#new-achievements {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.achievement-badge {
+    font-size: 30px;
+    animation: bounce 0.5s ease-in-out;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.hidden {
+    display: none !important;
+}
+
+.night-mode {
+    filter: brightness(0.7) saturate(0.8);
+}
+
+/* Game Over Flash Effect */
+#game-container.game-over-flash::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255, 0, 0, 0.6) 0%, rgba(255, 0, 0, 0) 70%);
+    z-index: 15;
+    animation: flashRed 0.4s ease-out forwards;
+    pointer-events: none;
+}
+
+@keyframes flashRed {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+/* Improved Start Screen */
+#start-screen {
+    background: linear-gradient(180deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.9) 100%);
+}
+
+#start-screen h1 {
+    font-size: 48px;
+    animation: floatTitle 2s ease-in-out infinite;
+}
+
+@keyframes floatTitle {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* Game Over Screen Improvements */
+#game-over-screen {
+    background: linear-gradient(180deg, rgba(30,0,0,0.85) 0%, rgba(0,0,0,0.95) 100%);
+}
+
+#game-over-screen h1 {
+    color: #ff4444;
+    animation: pulseRed 1s ease-in-out infinite;
+}
+
+@keyframes pulseRed {
+    0%, 100% { text-shadow: 0 0 10px rgba(255, 68, 68, 0.5); }
+    50% { text-shadow: 0 0 30px rgba(255, 68, 68, 0.8), 0 0 60px rgba(255, 68, 68, 0.4); }
+}

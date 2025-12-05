@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ghosty Bird</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <canvas id="gameCanvas"></canvas>
+        
+        <div id="ui-overlay">
+            <div id="score">0</div>
+            <div id="combo" class="hidden">🔥 x<span id="combo-count">2</span></div>
+            <div id="high-score">🏆 <span id="high-score-value">0</span></div>
+        </div>
+
+        <div id="start-screen">
+            <h1>👻 Ghosty Bird</h1>
+            <p>Pressione ESPAÇO ou clique para começar</p>
+            <div id="skin-selector">
+                <p>Escolha seu fantasma:</p>
+                <div id="skins"></div>
+            </div>
+            <div id="start-highscores">
+                <h3>🏆 Top 5</h3>
+                <ol id="start-leaderboard"></ol>
+            </div>
+        </div>
+
+        <div id="game-over-screen" class="hidden">
+            <h1>Game Over!</h1>
+            <div id="medal-container"></div>
+            <p>Pontuação: <span id="final-score">0</span></p>
+            <p>Melhor streak: <span id="final-streak">0</span> 🔥</p>
+            <div id="new-highscore" class="hidden">
+                <p>🎉 Novo High Score!</p>
+                <input type="text" id="player-name" placeholder="Seu nome" maxlength="10">
+            </div>
+            <div id="achievements-unlocked" class="hidden">
+                <h3>🏅 Conquistas Desbloqueadas!</h3>
+                <div id="new-achievements"></div>
+            </div>
+            <button id="restart-btn">Jogar Novamente</button>
+            <button id="share-btn">📤 Compartilhar</button>
+            <div id="leaderboard">
+                <h3>🏆 Top 5</h3>
+                <ol id="leaderboard-list"></ol>
+            </div>
+        </div>
+
+        <div id="pause-screen" class="hidden">
+            <h1>⏸️ Pausado</h1>
+            <p>Pressione ESC para continuar</p>
+        </div>
+
+        <div id="tutorial" class="hidden">
+            <div id="tutorial-content">
+                <h2>👻 Como Jogar</h2>
+                <div class="tutorial-item">
+                    <div class="tutorial-icon">🎮</div>
+                    <div class="tutorial-text"><strong>ESPAÇO</strong> ou <strong>CLIQUE</strong> para pular</div>
+                </div>
+                <div class="tutorial-item">
+                    <div class="tutorial-icon">⏸️</div>
+                    <div class="tutorial-text"><strong>ESC</strong> para pausar o jogo</div>
+                </div>
+                <div class="tutorial-item">
+                    <div class="tutorial-icon">🛡️</div>
+                    <div class="tutorial-text">Colete <strong>power-ups</strong> para vantagens</div>
+                </div>
+                <div class="tutorial-item">
+                    <div class="tutorial-icon">🔥</div>
+                    <div class="tutorial-text">Faça <strong>combos</strong> passando pelos canos</div>
+                </div>
+                <div class="tutorial-item">
+                    <div class="tutorial-icon">🏆</div>
+                    <div class="tutorial-text">Desbloqueie <strong>skins</strong> e <strong>conquistas</strong></div>
+                </div>
+                <button id="tutorial-close">Vamos Jogar!</button>
+            </div>
+        </div>
+
+        <div id="achievement-popup" class="hidden">
+            <span id="achievement-icon">🏅</span>
+            <span id="achievement-text"></span>
+        </div>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html>
