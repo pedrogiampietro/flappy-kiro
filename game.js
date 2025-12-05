@@ -34,13 +34,13 @@ ghostImg.src = 'assets/ghosty.png';
 const jumpSound = new Audio('assets/jump.wav');
 const gameOverSound = new Audio('assets/game_over.wav');
 
-// Skins
+// Skins - default usa a imagem ghosty.png
 const skins = [
-    { id: 'default', emoji: '👻', unlocked: true, requirement: null },
-    { id: 'fire', emoji: '🔥', unlocked: false, requirement: 'Score 10 points' },
-    { id: 'star', emoji: '⭐', unlocked: false, requirement: 'Score 25 points' },
-    { id: 'alien', emoji: '👽', unlocked: false, requirement: 'Score 50 points' },
-    { id: 'robot', emoji: '🤖', unlocked: false, requirement: '5 streak combo' }
+    { id: 'default', emoji: '👻', unlocked: true, requirement: null, useImage: true },
+    { id: 'fire', emoji: '🔥', unlocked: false, requirement: 'Score 10 points', useImage: false },
+    { id: 'star', emoji: '⭐', unlocked: false, requirement: 'Score 25 points', useImage: false },
+    { id: 'alien', emoji: '👽', unlocked: false, requirement: 'Score 50 points', useImage: false },
+    { id: 'robot', emoji: '🤖', unlocked: false, requirement: '5 streak combo', useImage: false }
 ];
 let selectedSkin = 'default';
 
@@ -112,41 +112,41 @@ const ground = { y: canvas.height - 50, height: 50 };
 
 // Storage functions
 function loadData() {
-    highScore = parseInt(localStorage.getItem('ghostyHighScore')) || 0;
+    highScore = parseInt(localStorage.getItem('flappyKiroHighScore')) || 0;
     highScoreDisplay.textContent = highScore;
     
-    const savedSkins = JSON.parse(localStorage.getItem('ghostySkins')) || [];
+    const savedSkins = JSON.parse(localStorage.getItem('flappyKiroSkins')) || [];
     savedSkins.forEach(id => {
         const skin = skins.find(s => s.id === id);
         if (skin) skin.unlocked = true;
     });
     
-    const savedAchievements = JSON.parse(localStorage.getItem('ghostyAchievements')) || [];
+    const savedAchievements = JSON.parse(localStorage.getItem('flappyKiroAchievements')) || [];
     savedAchievements.forEach(id => {
         if (achievements[id]) achievements[id].unlocked = true;
     });
     
-    totalPowerUpsCollected = parseInt(localStorage.getItem('ghostyPowerUps')) || 0;
-    selectedSkin = localStorage.getItem('ghostySelectedSkin') || 'default';
+    totalPowerUpsCollected = parseInt(localStorage.getItem('flappyKiroPowerUps')) || 0;
+    selectedSkin = localStorage.getItem('flappyKiroSelectedSkin') || 'default';
 }
 
 function saveData() {
-    localStorage.setItem('ghostyHighScore', highScore);
-    localStorage.setItem('ghostySkins', JSON.stringify(skins.filter(s => s.unlocked).map(s => s.id)));
-    localStorage.setItem('ghostyAchievements', JSON.stringify(Object.values(achievements).filter(a => a.unlocked).map(a => a.id)));
-    localStorage.setItem('ghostyPowerUps', totalPowerUpsCollected);
-    localStorage.setItem('ghostySelectedSkin', selectedSkin);
+    localStorage.setItem('flappyKiroHighScore', highScore);
+    localStorage.setItem('flappyKiroSkins', JSON.stringify(skins.filter(s => s.unlocked).map(s => s.id)));
+    localStorage.setItem('flappyKiroAchievements', JSON.stringify(Object.values(achievements).filter(a => a.unlocked).map(a => a.id)));
+    localStorage.setItem('flappyKiroPowerUps', totalPowerUpsCollected);
+    localStorage.setItem('flappyKiroSelectedSkin', selectedSkin);
 }
 
 function getLeaderboard() {
-    return JSON.parse(localStorage.getItem('ghostyLeaderboard')) || [];
+    return JSON.parse(localStorage.getItem('flappyKiroLeaderboard')) || [];
 }
 
 function saveToLeaderboard(name, score) {
     const leaderboard = getLeaderboard();
     leaderboard.push({ name, score, date: new Date().toLocaleDateString() });
     leaderboard.sort((a, b) => b.score - a.score);
-    localStorage.setItem('ghostyLeaderboard', JSON.stringify(leaderboard.slice(0, 5)));
+    localStorage.setItem('flappyKiroLeaderboard', JSON.stringify(leaderboard.slice(0, 5)));
 }
 
 function displayLeaderboard(listElement) {
@@ -212,14 +212,14 @@ function renderSkins() {
 
 // Tutorial
 function showTutorial() {
-    if (!localStorage.getItem('ghostyTutorialSeen')) {
+    if (!localStorage.getItem('flappyKiroTutorialSeen')) {
         tutorialScreen.classList.remove('hidden');
     }
 }
 
 tutorialClose.onclick = () => {
     tutorialScreen.classList.add('hidden');
-    localStorage.setItem('ghostyTutorialSeen', 'true');
+    localStorage.setItem('flappyKiroTutorialSeen', 'true');
 };
 
 // Game functions
@@ -523,9 +523,9 @@ function drawGhost() {
     
     // Draw skin
     const currentSkin = skins.find(s => s.id === selectedSkin);
-    if (selectedSkin === 'default') {
+    if (currentSkin && currentSkin.useImage) {
         ctx.drawImage(ghostImg, -ghost.width / 2, -ghost.height / 2, ghost.width, ghost.height);
-    } else {
+    } else if (currentSkin) {
         ctx.font = '40px Arial';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
@@ -647,10 +647,10 @@ function restart() {
 }
 
 function shareScore() {
-    const text = `🎮 Ghosty Bird\n👻 Pontuação: ${score}\n🔥 Melhor Combo: ${maxCombo}\n\nConsegue me superar?`;
+    const text = `🎮 Flappy Kiro\n🚀 Pontuação: ${score}\n🔥 Melhor Combo: ${maxCombo}\n\nConsegue me superar?`;
     
     if (navigator.share) {
-        navigator.share({ title: 'Ghosty Bird', text });
+        navigator.share({ title: 'Flappy Kiro', text });
     } else {
         navigator.clipboard.writeText(text).then(() => {
             alert('Resultado copiado para a área de transferência!');
